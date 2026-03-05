@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --accent: #19b27c;
+  --accent-strong: #0f8f63;
+}
+
+:root,
+:root[data-theme='dark'] {
+  --bg-base: #0a0c0f;
+  --surface-deep: #111720;
+  --surface-card: rgba(16, 20, 27, 0.82);
+  --surface-card-soft: rgba(17, 22, 29, 0.76);
+  --surface-card-strong: rgba(14, 18, 24, 0.94);
+  --surface-input: rgba(12, 15, 20, 0.98);
+  --text-main: #f3f6fa;
+  --text-muted: #9ba5b3;
+  --text-faint: #748192;
+  --accent-text: #79e5bc;
+  --accent-soft: rgba(26, 186, 131, 0.1);
+  --accent-muted: rgba(13, 133, 90, 0.07);
+  --accent-glow: rgba(103, 255, 192, 0.34);
+  --border-soft: rgba(128, 147, 172, 0.22);
+  --border-strong: rgba(128, 147, 172, 0.3);
+  --border-subtle: rgba(128, 147, 172, 0.15);
+  --accent-border: rgba(85, 234, 174, 0.6);
+  --progress-track: rgba(92, 118, 107, 0.24);
+  --panel-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+  --success-text: #a4f5cf;
+  --status-thinking-text: #f8e48f;
+  --status-thinking-bg: rgba(136, 108, 26, 0.17);
+  --status-thinking-border: rgba(218, 180, 66, 0.33);
+  --status-executing-text: #89e8bc;
+  --status-executing-bg: rgba(20, 124, 84, 0.21);
+  --status-executing-border: rgba(92, 229, 171, 0.28);
+  --status-done-text: #a5f3d5;
+  --status-done-bg: rgba(22, 136, 88, 0.24);
+  --status-done-border: rgba(112, 248, 188, 0.38);
+}
+
+:root[data-theme='light'] {
+  --bg-base: #eef3f1;
+  --surface-deep: #d6e5df;
+  --surface-card: rgba(253, 255, 254, 0.95);
+  --surface-card-soft: rgba(246, 250, 248, 0.9);
+  --surface-card-strong: rgba(250, 255, 253, 0.98);
+  --surface-input: #ffffff;
+  --text-main: #0b1914;
+  --text-muted: #566861;
+  --text-faint: #73857f;
+  --accent-text: #0f8f63;
+  --accent-soft: rgba(64, 201, 149, 0.24);
+  --accent-muted: rgba(31, 158, 110, 0.2);
+  --accent-glow: rgba(70, 179, 138, 0.22);
+  --border-soft: rgba(96, 130, 119, 0.2);
+  --border-strong: rgba(104, 136, 125, 0.27);
+  --border-subtle: rgba(106, 136, 126, 0.22);
+  --accent-border: rgba(31, 158, 110, 0.5);
+  --progress-track: rgba(98, 131, 119, 0.2);
+  --panel-shadow: 0 14px 30px rgba(40, 82, 66, 0.1);
+  --success-text: #146b48;
+  --status-thinking-text: #7c5a06;
+  --status-thinking-bg: rgba(236, 193, 83, 0.2);
+  --status-thinking-border: rgba(198, 153, 42, 0.44);
+  --status-executing-text: #0c7c52;
+  --status-executing-bg: rgba(95, 219, 165, 0.2);
+  --status-executing-border: rgba(35, 155, 108, 0.35);
+  --status-done-text: #0f7d54;
+  --status-done-bg: rgba(93, 209, 161, 0.2);
+  --status-done-border: rgba(33, 151, 104, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  line-height: 1.45;
+  background: var(--bg-base);
+  color: var(--text-main);
+  overflow: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
