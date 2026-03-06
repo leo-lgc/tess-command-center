@@ -4,6 +4,8 @@ import {
   Activity,
   Bot,
   Cpu,
+  Eye,
+  EyeOff,
   MoonStar,
   SendHorizonal,
   Sun,
@@ -129,6 +131,7 @@ function App() {
   const [selectedAgentId, setSelectedAgentId] = useState(INITIAL_AGENTS[0].id)
   const [prompt, setPrompt] = useState('')
   const [burstAgentId, setBurstAgentId] = useState(null)
+  const [presentationMode, setPresentationMode] = useState(false)
   const [showIntro, setShowIntro] = useState(true)
   const [hasWebGL] = useState(() => {
     if (typeof document === 'undefined') {
@@ -196,6 +199,12 @@ function App() {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
         promptRef.current?.focus()
+        return
+      }
+
+      if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.key.toLowerCase() === 'p') {
+        event.preventDefault()
+        setPresentationMode((current) => !current)
       }
     }
 
@@ -372,19 +381,34 @@ function App() {
             <img className="brand-logo" src={logoSrc} alt="TESS" />
             <p className="eyebrow">Command Center</p>
           </div>
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <MoonStar size={16} />}
-            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-          </button>
+
+          <div className="topbar-actions">
+            <button
+              type="button"
+              className="mode-toggle"
+              onClick={() => setPresentationMode((current) => !current)}
+            >
+              {presentationMode ? <Eye size={16} /> : <EyeOff size={16} />}
+              {presentationMode ? 'Exit Focus' : 'Focus Mode'}
+            </button>
+
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+            >
+              {theme === 'dark' ? <Sun size={16} /> : <MoonStar size={16} />}
+              {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            </button>
+          </div>
         </header>
       </div>
 
-      <main className="grid-layout content-shell">
-        <section className="panel agent-feed">
+      <main className={`grid-layout content-shell ${presentationMode ? 'presentation' : ''}`}>
+        <section
+          className={`panel agent-feed ${presentationMode ? 'is-hidden' : ''}`}
+          aria-hidden={presentationMode}
+        >
           <div className="panel-header">
             <h2>Agents</h2>
             <span>{agents.length} online</span>
@@ -533,7 +557,7 @@ function App() {
               </button>
             </form>
 
-            <p className="prompt-hint">Tip: use Ctrl/Cmd + K to jump to Prompt.</p>
+            <p className="prompt-hint">Tip: use Ctrl/Cmd + K to jump to Prompt. Ctrl/Cmd + Shift + P toggles Focus Mode.</p>
           </section>
         </div>
       </main>
