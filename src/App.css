@@ -131,13 +131,20 @@
 
 .texture {
   position: fixed;
-  inset: -20%;
+  inset: -14%;
   z-index: -1;
   background:
-    radial-gradient(circle at 50% -10%, var(--accent-soft), transparent 26%),
-    radial-gradient(circle at 18% 100%, var(--accent-muted), transparent 30%);
-  filter: blur(30px);
-  opacity: 0.75;
+    radial-gradient(circle at 50% -8%, color-mix(in srgb, var(--accent-soft) 90%, transparent), transparent 34%),
+    radial-gradient(circle at 86% 22%, color-mix(in srgb, var(--accent-muted) 78%, transparent), transparent 36%),
+    radial-gradient(circle at 16% 84%, color-mix(in srgb, var(--accent-muted) 82%, transparent), transparent 40%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-base) 94%, #0a1115 6%) 0%,
+      var(--bg-base) 52%,
+      color-mix(in srgb, var(--bg-base) 92%, #05070a 8%) 100%
+    );
+  filter: blur(36px);
+  opacity: 0.88;
 }
 
 .topbar {
@@ -203,7 +210,7 @@
 .grid-layout {
   display: grid;
   grid-template-columns: minmax(170px, 0.34fr) minmax(980px, 1.9fr);
-  gap: 0.95rem;
+  gap: 0.62rem;
   height: 100%;
 }
 
@@ -244,7 +251,7 @@
 .agent-feed {
   display: flex;
   flex-direction: column;
-  max-width: 250px;
+  max-width: 280px;
   justify-self: start;
 }
 
