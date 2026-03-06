@@ -4,6 +4,123 @@
   padding: 1.25rem clamp(1rem, 2vw, 1.75rem);
 }
 
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--bg-base) 84%, black 16%);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+:root[data-theme='light'] .intro-overlay {
+  background: color-mix(in srgb, var(--bg-base) 90%, white 10%);
+}
+
+.intro-overlay::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 1;
+  background-image: radial-gradient(circle, rgba(102, 249, 193, 0.24) 1px, transparent 1.4px);
+  background-size: 25px 25px;
+  opacity: 0.24;
+  mask-image: radial-gradient(
+    circle at 50% 48%,
+    transparent 18%,
+    rgba(0, 0, 0, 0.12) 36%,
+    rgba(0, 0, 0, 0.45) 56%,
+    rgba(0, 0, 0, 0.82) 76%,
+    black 100%
+  );
+  transform: perspective(900px) rotateX(58deg) translateY(14%);
+  transform-origin: center;
+  animation: dot-drift 22s linear infinite;
+  pointer-events: none;
+}
+
+.intro-overlay::after {
+  content: '';
+  position: absolute;
+  inset: -18%;
+  z-index: 1;
+  background-image: radial-gradient(circle, rgba(124, 255, 211, 0.15) 0.9px, transparent 1.3px);
+  background-size: 19px 19px;
+  opacity: 0.12;
+  mask-image: radial-gradient(circle at 50% 52%, transparent 26%, rgba(0, 0, 0, 0.5) 58%, black 100%);
+  transform: perspective(900px) rotateX(58deg) translateY(17%);
+  animation: dot-drift-alt 28s linear infinite;
+  pointer-events: none;
+}
+
+:root[data-theme='light'] .intro-overlay::before {
+  background-image: radial-gradient(circle, rgba(20, 30, 38, 0.38) 1px, transparent 1.4px);
+  opacity: 0.3;
+  background-size: 23px 23px;
+}
+
+:root[data-theme='light'] .intro-overlay::after {
+  background-image: radial-gradient(circle, rgba(16, 24, 31, 0.28) 0.9px, transparent 1.3px);
+  opacity: 0.2;
+  background-size: 19px 19px;
+}
+
+.intro-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.intro-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.intro-logo-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+  padding: 1.2rem 1.4rem;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.intro-logo {
+  width: clamp(200px, 22vw, 330px);
+  height: auto;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.24));
+}
+
+.intro-caption {
+  margin: 0;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+@keyframes dot-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-24px, -24px, 0);
+  }
+}
+
+@keyframes dot-drift-alt {
+  0% {
+    transform: perspective(900px) rotateX(58deg) translate3d(0, 17%, 0);
+  }
+  100% {
+    transform: perspective(900px) rotateX(58deg) translate3d(24px, calc(17% - 24px), 0);
+  }
+}
+
 .texture {
   position: fixed;
   inset: -20%;

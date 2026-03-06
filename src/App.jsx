@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Activity,
@@ -9,6 +9,8 @@ import {
   Sun,
 } from 'lucide-react'
 import './App.css'
+
+const IntroLogoScene = lazy(() => import('./components/IntroLogoScene'))
 
 const STATUS_LABEL = {
   thinking: 'thinking',
@@ -88,6 +90,7 @@ const MotionArticle = motion.article
 const MotionSpan = motion.span
 const MotionDiv = motion.div
 const MotionParagraph = motion.p
+const MotionImg = motion.img
 
 const formatTime = (date = new Date()) => {
   return date.toLocaleTimeString('pt-BR', {
@@ -110,11 +113,24 @@ const pickLine = (agent, nextStatus) => {
 }
 
 function App() {
-  const [theme, setTheme] = useState('dark')
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === 'undefined') {
+      return 'dark'
+    }
+
+    const savedTheme = window.localStorage.getItem('tess_theme')
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      return savedTheme
+    }
+
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  })
   const [agents, setAgents] = useState(INITIAL_AGENTS)
   const [selectedAgentId, setSelectedAgentId] = useState(INITIAL_AGENTS[0].id)
   const [prompt, setPrompt] = useState('')
   const [burstAgentId, setBurstAgentId] = useState(null)
+  const [showIntro, setShowIntro] = useState(true)
+  const [introTilt, setIntroTilt] = useState({ x: 0, y: 0 })
   const [logs, setLogs] = useState([
     {
       id: crypto.randomUUID(),
@@ -138,7 +154,20 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
+    window.localStorage.setItem('tess_theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    if (!showIntro) {
+      return
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowIntro(false)
+    }, 2800)
+
+    return () => window.clearTimeout(timer)
+  }, [showIntro])
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -252,6 +281,51 @@ function App() {
 
   return (
     <div className="app-shell">
+      <AnimatePresence>
+        {showIntro ? (
+          <MotionDiv
+            className="intro-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            onMouseMove={(event) => {
+              const { innerWidth, innerHeight } = window
+              const x = ((event.clientY / innerHeight) - 0.5) * -12
+              const y = ((event.clientX / innerWidth) - 0.5) * 12
+              setIntroTilt({ x, y })
+            }}
+          >
+            <div className="intro-canvas-wrap">
+              <Suspense fallback={null}>
+                <IntroLogoScene theme={theme} />
+              </Suspense>
+            </div>
+
+            <MotionDiv
+              className="intro-logo-shell"
+              initial={{ opacity: 0, scale: 0.93, y: 14 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 1.02, y: -6 }}
+              transition={{ duration: 0.55, ease: 'easeOut' }}
+              style={{
+                transform: `perspective(900px) rotateX(${introTilt.x}deg) rotateY(${introTilt.y}deg)`,
+              }}
+            >
+              <MotionImg
+                src={logoSrc}
+                alt="TESS"
+                className="intro-logo"
+                initial={{ opacity: 0, filter: 'blur(7px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                transition={{ delay: 0.18, duration: 0.48 }}
+              />
+              <p className="intro-caption">Command Center</p>
+            </MotionDiv>
+          </MotionDiv>
+        ) : null}
+      </AnimatePresence>
+
       <div className="texture" />
       <header className="topbar">
         <div className="brand">
@@ -286,8 +360,6 @@ function App() {
                   key={agent.id}
                   className={`agent-card ${isSelected ? 'selected' : ''}`}
                   onClick={() => setSelectedAgentId(agent.id)}
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
                 >
                   <AnimatePresence>
                     {isBursting ? (
