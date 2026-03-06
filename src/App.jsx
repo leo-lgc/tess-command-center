@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Activity,
@@ -130,7 +130,18 @@ function App() {
   const [prompt, setPrompt] = useState('')
   const [burstAgentId, setBurstAgentId] = useState(null)
   const [showIntro, setShowIntro] = useState(true)
+  const [hasWebGL] = useState(() => {
+    if (typeof document === 'undefined') {
+      return false
+    }
+
+    const canvas = document.createElement('canvas')
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    return Boolean(gl)
+  })
   const [introTilt, setIntroTilt] = useState({ x: 0, y: 0 })
+  const terminalRef = useRef(null)
+  const promptRef = useRef(null)
   const [logs, setLogs] = useState([
     {
       id: crypto.randomUUID(),
@@ -168,6 +179,29 @@ function App() {
 
     return () => window.clearTimeout(timer)
   }, [showIntro])
+
+  useEffect(() => {
+    if (!terminalRef.current) {
+      return
+    }
+
+    terminalRef.current.scrollTo({
+      top: terminalRef.current.scrollHeight,
+      behavior: 'smooth',
+    })
+  }, [logs])
+
+  useEffect(() => {
+    const handleShortcut = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        promptRef.current?.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleShortcut)
+    return () => window.removeEventListener('keydown', handleShortcut)
+  }, [])
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -262,11 +296,13 @@ function App() {
     setBurstAgentId(selectedAgentId)
     window.setTimeout(() => setBurstAgentId(null), 850)
 
+    const newLogId = crypto.randomUUID()
+
     setLogs((prevLogs) => {
       const nextLogs = [
         ...prevLogs,
         {
-          id: crypto.randomUUID(),
+          id: newLogId,
           time: formatTime(),
           level: 'prompt',
           line: `Instruction sent to ${selectedAgent.name}: "${prompt.trim()}"`,
@@ -296,11 +332,13 @@ function App() {
               setIntroTilt({ x, y })
             }}
           >
-            <div className="intro-canvas-wrap">
-              <Suspense fallback={null}>
-                <IntroLogoScene theme={theme} />
-              </Suspense>
-            </div>
+            {hasWebGL ? (
+              <div className="intro-canvas-wrap">
+                <Suspense fallback={null}>
+                  <IntroLogoScene theme={theme} />
+                </Suspense>
+              </div>
+            ) : null}
 
             <MotionDiv
               className="intro-logo-shell"
@@ -437,7 +475,7 @@ function App() {
               </span>
             </div>
 
-            <div className="terminal">
+            <div className="terminal" ref={terminalRef} aria-live="polite">
               <AnimatePresence initial={false}>
                 {logs.map((log) => (
                   <MotionDiv
@@ -473,8 +511,15 @@ function App() {
               <label>
                 Prompt
                 <textarea
+                  ref={promptRef}
                   value={prompt}
                   onChange={(event) => setPrompt(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                      event.preventDefault()
+                      event.currentTarget.form?.requestSubmit()
+                    }
+                  }}
                   rows={4}
                   placeholder="Ask an agent to execute a new task..."
                 />
@@ -484,6 +529,8 @@ function App() {
                 <SendHorizonal size={15} /> Send
               </button>
             </form>
+
+            <p className="prompt-hint">Tip: use Ctrl/Cmd + K to jump to Prompt.</p>
           </section>
         </div>
       </main>

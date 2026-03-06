@@ -30,10 +30,19 @@ npm run preview
 - Quick Prompt para enviar nova instrucao a um agente especifico.
 - Indicador de modelo em cada card e no painel de foco do agente selecionado.
 - Tema `dark/light` com tokens de design para reforcar maturidade de sistema visual.
+- Atalhos e usabilidade de operacao: `Ctrl/Cmd + K` para focar no Prompt e `Enter` para enviar rapido.
 
 ## Micro-interacao surpresa
 
-Quando um agente troca de estado ou recebe novo prompt, o card dispara um efeito de `resonance burst` animado (pulso radial) sincronizado com a entrada no log em tempo real. Isso cria uma sensacao de evento vivo, nao apenas atualizacao de texto.
+- Intro imersiva com Three.js: logo TESS em cena 3D minimal com profundidade, particulas e versao adaptada para `dark/light`.
+- Atualizacoes de agentes com transicao natural de texto e `resonance burst` sincronizado com o log em tempo real.
+
+## Roteiro rapido de demonstracao (2-3 min)
+
+- Abra a interface e destaque a intro com identidade visual premium.
+- Mostre dois temas (`dark/light`) com consistencia da linguagem visual.
+- Dispare prompts para agentes diferentes e evidencie o log em tempo real.
+- Mostre o atalho `Ctrl/Cmd + K` e envio rapido com `Enter`.
 
 ## Ferramentas de IA usadas
 
