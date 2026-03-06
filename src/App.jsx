@@ -365,22 +365,25 @@ function App() {
       </AnimatePresence>
 
       <div className="texture" />
-      <header className="topbar">
-        <div className="brand">
-          <img className="brand-logo" src={logoSrc} alt="TESS" />
-          <p className="eyebrow">Command Center</p>
-        </div>
-        <button
-          type="button"
-          className="theme-toggle"
-          onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
-        >
-          {theme === 'dark' ? <Sun size={16} /> : <MoonStar size={16} />}
-          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-        </button>
-      </header>
 
-      <main className="grid-layout">
+      <div className="header-shell">
+        <header className="topbar">
+          <div className="brand">
+            <img className="brand-logo" src={logoSrc} alt="TESS" />
+            <p className="eyebrow">Command Center</p>
+          </div>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+          >
+            {theme === 'dark' ? <Sun size={16} /> : <MoonStar size={16} />}
+            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </button>
+        </header>
+      </div>
+
+      <main className="grid-layout content-shell">
         <section className="panel agent-feed">
           <div className="panel-header">
             <h2>Agents</h2>

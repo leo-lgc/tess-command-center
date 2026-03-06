@@ -1,7 +1,15 @@
 .app-shell {
   position: relative;
   height: 100dvh;
-  padding: 1.25rem clamp(1rem, 2vw, 1.75rem);
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.header-shell {
+  border-bottom: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, var(--surface-card) 94%, transparent);
+  backdrop-filter: blur(10px);
+  padding: 0.85rem clamp(1rem, 2vw, 1.75rem);
 }
 
 .intro-overlay {
@@ -136,7 +144,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 .brand {
@@ -196,7 +204,11 @@
   display: grid;
   grid-template-columns: minmax(170px, 0.34fr) minmax(980px, 1.9fr);
   gap: 0.95rem;
-  height: calc(100dvh - 86px);
+  height: 100%;
+}
+
+.content-shell {
+  padding: 1rem clamp(1rem, 2vw, 1.75rem) 1.25rem;
 }
 
 .panel {
@@ -591,11 +603,22 @@ textarea:focus,
   .app-shell {
     height: auto;
     min-height: 100dvh;
+    display: block;
+  }
+
+  .header-shell {
+    position: sticky;
+    top: 0;
+    z-index: 5;
   }
 
   .grid-layout {
     height: auto;
     grid-template-columns: 1fr;
+  }
+
+  .content-shell {
+    padding-top: 0.85rem;
   }
 
   .center-stage {
