@@ -160,6 +160,18 @@
   gap: 0.5rem;
 }
 
+.cost-monitor {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-card-strong) 88%, transparent);
+  color: var(--text-main);
+  padding: 0.48rem 0.8rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -254,6 +266,8 @@
 
 .content-shell {
   padding: 1rem clamp(1rem, 2vw, 1.75rem) 1.25rem;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .panel {
@@ -331,17 +345,25 @@
   border: 1px solid transparent;
   border-radius: 13px;
   background: var(--surface-card-strong);
-  padding: 0.78rem;
-  height: 132px;
+  padding: 0.72rem;
+  height: 156px;
   cursor: pointer;
   transition:
     border-color 0.22s ease,
-    background-color 0.22s ease;
+    background-color 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .agent-card:hover {
   border-color: color-mix(in srgb, var(--accent-border) 84%, var(--border-soft));
   background: color-mix(in srgb, var(--surface-card-strong) 80%, white 6%);
+}
+
+.agent-card.is-executing {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--model-glow) 56%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--model-glow) 12%, transparent);
+  animation: executing-glow 1.9s ease-in-out infinite;
 }
 
 .agent-card::after {
@@ -394,32 +416,32 @@
 
 .agent-name {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.84rem;
   font-weight: 600;
 }
 
 .agent-task {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  display: block;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .agent-task-wrap {
   margin-top: 0.25rem;
-  min-height: calc(0.76rem * 1.4 * 2);
+  min-height: calc(0.72rem * 1.4);
 }
 
 .status-pill {
   border-radius: 999px;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  padding: 0.26rem 0.56rem;
+  padding: 0.22rem 0.5rem;
   border: 1px solid;
 }
 
@@ -442,11 +464,19 @@
 }
 
 .agent-meta {
-  margin-top: 0.58rem;
+  margin-top: 0.48rem;
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-faint);
+}
+
+.dependency-tag {
+  margin: 0.24rem 0 0;
+  font-size: 0.6rem;
+  color: color-mix(in srgb, var(--accent) 74%, var(--text-muted));
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .agent-meta span {
@@ -455,9 +485,27 @@
   gap: 0.26rem;
 }
 
+.agent-telemetry {
+  margin-top: 0.34rem;
+  display: flex;
+  gap: 0.28rem;
+  font-size: 0.6rem;
+  color: var(--text-faint);
+}
+
+.agent-telemetry span {
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.2rem 0.42rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .progress-track {
-  margin-top: 0.5rem;
-  height: 0.3rem;
+  margin-top: 0.46rem;
+  height: 0.24rem;
   border-radius: 999px;
   background: var(--progress-track);
   overflow: hidden;
@@ -474,6 +522,7 @@
   display: flex;
   justify-content: center;
   transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
 }
 
 .grid-layout.presentation .center-stage {
@@ -481,17 +530,15 @@
 }
 
 .command-center {
-  transition: width 0.42s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.command-center {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   background: var(--surface-card-soft);
   overflow: hidden;
+  transition: width 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .workspace-top {
@@ -518,6 +565,7 @@
 
 .context-bar {
   margin: 0 1rem;
+  margin-bottom: 0.5rem;
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
@@ -542,8 +590,9 @@
 
 .terminal {
   min-height: 0;
+  max-height: 100%;
   overflow-y: auto;
-  padding: 0.8rem 1rem;
+  padding: 1.55rem 1rem 0.8rem;
   font-family: var(--font-mono);
   display: flex;
   flex-direction: column;
@@ -552,13 +601,43 @@
 
 .terminal-line {
   display: grid;
-  grid-template-columns: 94px 1fr;
+  grid-template-columns: 94px 1fr auto;
   gap: 0.45rem;
   align-items: start;
   margin: 0.35rem 0;
   font-size: 0.82rem;
   border-radius: 8px;
   transition: background-color 0.22s ease;
+}
+
+.line-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.terminal-line:hover .line-actions {
+  opacity: 1;
+}
+
+.line-action-btn {
+  border: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, var(--surface-card-strong) 88%, transparent);
+  color: var(--text-muted);
+  border-radius: 7px;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.line-action-btn:hover {
+  color: var(--text-main);
+  border-color: var(--border-strong);
 }
 
 .terminal-time {
@@ -584,10 +663,34 @@
 .prompt-form {
   padding: 0.9rem 1rem 1rem;
   display: grid;
-  grid-template-columns: 210px 1fr auto;
+  grid-template-columns: 210px 180px 1fr auto;
   align-items: end;
   gap: 0.65rem;
   border-top: 1px solid var(--border-subtle);
+}
+
+.prompt-model-card {
+  min-height: 46px;
+  display: grid;
+  align-content: center;
+  gap: 0.08rem;
+  padding: 0.46rem 0.72rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface-card-strong) 86%, transparent);
+}
+
+.prompt-model-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.prompt-model-card strong {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
 .prompt-form label {
@@ -675,6 +778,67 @@ textarea:focus,
   color: var(--text-faint);
 }
 
+.payload-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--bg-base) 74%, black 26%);
+  backdrop-filter: blur(4px);
+}
+
+.payload-modal {
+  width: min(680px, 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: var(--surface-card-strong);
+  overflow: hidden;
+}
+
+.payload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.72rem 0.8rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.payload-header h4 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.36rem;
+  font-size: 0.82rem;
+}
+
+.payload-modal pre {
+  margin: 0;
+  max-height: 56vh;
+  overflow: auto;
+  padding: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  line-height: 1.45;
+  color: var(--text-main);
+}
+
+@keyframes executing-glow {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--model-glow) 54%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--model-glow) 10%, transparent);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--model-glow) 72%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--model-glow) 22%, transparent),
+      0 0 18px color-mix(in srgb, var(--model-glow) 16%, transparent);
+  }
+}
+
 @media (max-width: 980px) {
   body {
     overflow: auto;
@@ -703,6 +867,12 @@ textarea:focus,
 
   .topbar-actions {
     gap: 0.35rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .cost-monitor {
+    order: 3;
   }
 
   .content-shell {
@@ -732,5 +902,9 @@ textarea:focus,
 
   .prompt-form {
     grid-template-columns: 1fr;
+  }
+
+  .terminal-line {
+    grid-template-columns: 78px 1fr auto;
   }
 }
