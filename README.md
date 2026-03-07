@@ -37,13 +37,6 @@ npm run preview
 - Intro imersiva com Three.js: logo TESS em cena 3D minimal com profundidade, particulas e versao adaptada para `dark/light`.
 - Atualizacoes de agentes com transicao natural de texto e `resonance burst` sincronizado com o log em tempo real.
 
-## Roteiro rapido de demonstracao (2-3 min)
-
-- Abra a interface e destaque a intro com identidade visual premium.
-- Mostre dois temas (`dark/light`) com consistencia da linguagem visual.
-- Dispare prompts para agentes diferentes e evidencie o log em tempo real.
-- Mostre o atalho `Ctrl/Cmd + K` e envio rapido com `Enter`.
-
 ## Ferramentas de IA usadas
 
 - ChatGPT para acelerar ideacao de arquitetura da interface e refinamento de copy dos estados.
@@ -55,9 +48,3 @@ Escolhi separar a tela em tres zonas claras (agentes, terminal e dispatch de pro
 
 Motivo: em cenarios com multiplos agentes, o usuario precisa identificar rapido `quem esta fazendo o que`, `se esta funcionando`, e `como intervir` sem trocar de contexto.
 
-## O que eu faria com mais tempo
-
-- Persistencia dos eventos e filtros por agente/modelo/status no log.
-- Modo de comparacao entre outputs de modelos (ex: GPT x Claude x Gemini).
-- Instrumentacao de acessibilidade avancada (atalhos de teclado e narracao de eventos em ARIA live).
-- Empty/loading/error states mais completos para cobrirem comportamento real de integracao.
